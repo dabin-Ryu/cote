@@ -1,0 +1,32 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        int m = scanner.nextInt();
+
+        boolean[] isPrime = new boolean[m+1];
+
+        // 모든 수를 소수로 초기화
+        for (int i = 2; i <= m; i++) {
+          isPrime[i] = true;
+        }
+
+        // 에라토스테네스의 체 구현
+        for (int i = 2; i * i <= m; i++) {
+          if(isPrime[i]) {   // 소수일 때 배수 제거
+            for (int j = i * i; j <= m; j += i) { 
+              isPrime[j] = false;
+            }
+          }
+        }
+
+        // 입력받은 수 사이의 소수 판별
+        for (int i = n; i <= m; i++) {
+          if(isPrime[i]) System.out.println(i);
+        }
+
+      scanner.close();
+    }
+}
