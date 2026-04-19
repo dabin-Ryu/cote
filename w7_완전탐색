@@ -1,0 +1,57 @@
+import java.util.*;
+
+class Solution {
+    static char[] characters = {'A', 'C', 'F', 'J', 'M', 'N', 'R', 'T'};
+    static char[] position = new char[8];
+    static boolean[] visited = new boolean[8];
+    static int answer = 0;
+
+    public int solution(int n, String[] data) {
+        answer = 0;
+        permutation(0, n, data);
+        return answer;
+    }
+
+    // 완전탐색 구현
+    static void permutation(int depth, int n, String[] data) {
+        if (depth == 8) {
+            if (check(n, data)) answer++;
+            return;
+        }
+
+        for (int i = 0; i < 8; i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                position[depth] = characters[i];
+                permutation(depth + 1, n, data);
+                visited[i] = false;
+            }
+        }
+    }
+
+    // 모든 조건을 만족하는지 확인
+    static boolean check(int n, String[] data) {
+        for (int i = 0; i < n; i++) {
+            char a = data[i].charAt(0);  
+            char b = data[i].charAt(2); 
+            char op = data[i].charAt(3); 
+            int k = data[i].charAt(4) - '0'; 
+
+            int posA = -1, posB = -1;
+            for (int j = 0; j < 8; j++) {
+                if (position[j] == a) posA = j;
+                if (position[j] == b) posB = j;
+            }
+
+            // 캐릭터 사이의 거리
+            int gap = Math.abs(posA - posB) - 1;
+
+            switch (op) {
+                case '=': if (gap != k) return false; break;
+                case '<': if (gap >= k) return false; break;
+                case '>': if (gap <= k) return false; break;
+            }
+        }
+        return true;
+    }
+}
