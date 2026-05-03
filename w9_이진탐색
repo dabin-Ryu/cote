@@ -1,0 +1,55 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    static int M, N;
+    static int[] A;
+
+    // compare 함수: M - count
+    static long compare(long middle) {
+        long count = 0;
+
+        for (int snack : A) {
+            count += snack / middle;
+        }
+
+        return M - count;
+    }
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        M = Integer.parseInt(st.nextToken()); // 조카 수
+        N = Integer.parseInt(st.nextToken()); // 과자 개수
+
+        A = new int[N];
+        st = new StringTokenizer(br.readLine());
+
+        long right = 0;
+        for (int i = 0; i < N; i++) {
+            A[i] = Integer.parseInt(st.nextToken());
+            right = Math.max(right, A[i]);
+        }
+
+        long left = 1;
+        long answer = 0;
+
+        while (left <= right) {
+            long mid = (left + right) / 2;
+
+            long result = compare(mid);
+
+            if (result <= 0) {
+                // count >= M → 과자가 충분 → 더 길게 잘라도 됨
+                answer = mid;
+                left = mid + 1;
+            } else {
+                // count < M → 과자가 부족 → 더 짧게 잘라야 함
+                right = mid - 1;
+            }
+        }
+
+        System.out.println(answer);
+    }
+}
